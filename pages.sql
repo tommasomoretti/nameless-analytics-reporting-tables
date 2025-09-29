@@ -50,18 +50,18 @@ with event_data as (
       session_browser_name,
 
       -- PAGE DATA
-      (select value.string from unnest (event_data) where name = 'page_id') as page_id,
-      first_value(event_timestamp) over (partition by (select value.string from unnest (event_data) where name = 'page_id') order by event_timestamp asc) as page_load_timestamp,
-      first_value(event_timestamp) over (partition by (select value.string from unnest (event_data) where name = 'page_id') order by event_timestamp desc) as page_unload_timestamp,
-      (select value.string from unnest (event_data) where name = 'page_category') as page_category,
-      (select value.string from unnest (event_data) where name = 'page_location') as page_location,
-      (select value.string from unnest (event_data) where name = 'page_title') as page_title,
-      (select value.string from unnest (event_data) where name = 'page_hostname') as page_hostname,
+      (select value.string from unnest (page_data) where name = 'page_id') as page_id,
+      first_value(event_timestamp) over (partition by (select value.string from unnest (page_data) where name = 'page_id') order by event_timestamp asc) as page_load_timestamp,
+      first_value(event_timestamp) over (partition by (select value.string from unnest (page_data) where name = 'page_id') order by event_timestamp desc) as page_unload_timestamp,
+      (select value.string from unnest (page_data) where name = 'page_category') as page_category,
+      (select value.string from unnest (page_data) where name = 'page_location') as page_location,
+      (select value.string from unnest (page_data) where name = 'page_title') as page_title,
+      (select value.string from unnest (page_data) where name = 'page_hostname') as page_hostname,
+      (select value.int from unnest (page_data) where name = 'page_status_code') as page_status_code,
       (select value.int from unnest (event_data) where name = 'time_to_dom_interactive') as time_to_dom_interactive,
       (select value.int from unnest (event_data) where name = 'page_render_time') as page_render_time,
       (select value.int from unnest (event_data) where name = 'time_to_dom_complete') as time_to_dom_complete,
       (select value.int from unnest (event_data) where name = 'total_page_load_time') as total_page_load_time,
-      (select value.int from unnest (event_data) where name = 'page_status_code') as page_status_code,
 
       -- EVENT DATA
       event_date,

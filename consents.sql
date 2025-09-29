@@ -44,10 +44,11 @@ with event_data as (
       -- CONSENT DATA
       case 
         when consent_expressed = 'Yes' then 'Consent expressed'
-        else'Consent not expressed'
+        when consent_expressed = 'No' then 'Consent not expressed'
+        else consent_expressed
       end as consent_state,
       consent AS consent_name,
-      sum(value) AS consent_value_int_accepted
+      value AS consent_value_int_accepted
     FROM `tom-moretti.nameless_analytics.sessions`(start_date, end_date)
     UNPIVOT (
       value FOR consent IN (session_ad_user_data, session_ad_personalization, session_ad_storage, session_analytics_storage, session_functionality_storage, session_personalization_storage, session_security_storage)
@@ -106,13 +107,26 @@ with event_data as (
       when consent_state = 'Consent not expressed' then session_id
       else null
     end as session_id_consent_not_expressed,
+    case 
+      when consent_state = 'Consent mode not present' then session_id
+      else null
+    end as session_id_consent_mode_not_present,
     consent_name,
     case 
       when consent_state = 'Consent expressed' and consent_value_int_accepted = 1 then 'Granted'
       when consent_state = 'Consent expressed' and consent_value_int_accepted = 0 then 'Denied'
-      -- when consent_state = 'Consent not expressed' then ''
+      else null
     end as consent_value_string,
-    consent_value_int_accepted,
+    case 
+      when consent_state = 'Consent expressed' and consent_name = "session_ad_user_data" and consent_value_int_accepted = 1 then 1
+      when consent_state = 'Consent expressed' and consent_name = "session_ad_personalization" and consent_value_int_accepted = 1 then 1
+      when consent_state = 'Consent expressed' and consent_name = "session_ad_storage" and consent_value_int_accepted = 1 then 1
+      when consent_state = 'Consent expressed' and consent_name = "session_analytics_storage" and consent_value_int_accepted = 1 then 1
+      when consent_state = 'Consent expressed' and consent_name = "session_functionality_storage" and consent_value_int_accepted = 1 then 1
+      when consent_state = 'Consent expressed' and consent_name = "session_personalization_storage" and consent_value_int_accepted = 1 then 1
+      when consent_state = 'Consent expressed' and consent_name = "session_security_storage" and consent_value_int_accepted = 1 then 1
+      else null
+    end as consent_value_int_accepted,
     case 
       when consent_state = 'Consent expressed' and consent_name = "session_ad_user_data" and consent_value_int_accepted = 0 then 1
       when consent_state = 'Consent expressed' and consent_name = "session_ad_personalization" and consent_value_int_accepted = 0 then 1
@@ -121,7 +135,7 @@ with event_data as (
       when consent_state = 'Consent expressed' and consent_name = "session_functionality_storage" and consent_value_int_accepted = 0 then 1
       when consent_state = 'Consent expressed' and consent_name = "session_personalization_storage" and consent_value_int_accepted = 0 then 1
       when consent_state = 'Consent expressed' and consent_name = "session_security_storage" and consent_value_int_accepted = 0 then 1
-      else 0
+      else null
     end as consent_value_int_denied,
   from event_data
   group by all

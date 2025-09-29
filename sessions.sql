@@ -183,7 +183,8 @@ with event_data as (
       end as consent_timestamp,
       case 
           when countif(consent_type = 'Update') over (partition by session_id) > 0 then 'Yes'
-          else 'No'
+          when countif(consent_type = 'Default') over (partition by session_id) > 0 then 'No'
+          else consent_type
       end as consent_expressed
     from event_data
   ),

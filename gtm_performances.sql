@@ -48,6 +48,19 @@ SELECT
     session_language,
     session_browser_name,
 
+    -- PAGE DATA
+    ARRAY(
+      SELECT AS STRUCT
+        name,
+        STRUCT(
+          value.string AS string,
+          value.int AS int,
+          value.float AS float,
+          TO_JSON_STRING(value.json) AS json
+        ) AS value
+      FROM UNNEST(page_data)
+    ) AS page_data,
+
     -- EVENT DATA
     event_date,
     event_datetime,
@@ -57,7 +70,7 @@ SELECT
     (processing_event_timestamp - event_timestamp) / 1000 AS delay_in_seconds,
     event_origin,
     content_length,
-    (SELECT value.string FROM UNNEST(event_data) WHERE name = 'page_hostname') AS cs_hostname,
+    (SELECT value.string FROM UNNEST(event_data) WHERE name = 'cs_hostname') AS cs_hostname,
     (SELECT value.string FROM UNNEST(event_data) WHERE name = 'ss_hostname') AS ss_hostname,
     (SELECT value.string FROM UNNEST(event_data) WHERE name = 'cs_container_id') AS cs_container_id,
     (SELECT value.string FROM UNNEST(event_data) WHERE name = 'ss_container_id') AS ss_container_id,

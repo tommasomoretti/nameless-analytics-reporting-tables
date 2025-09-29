@@ -266,6 +266,7 @@ with event_data as (
     max(returning_customers) as returning_customers,
 
     sum(sessions) as sessions,
+    avg(session_duration_sec) as session_duration_sec, 
     sum(page_view) as page_view,
     days_from_first_purchase,
     days_from_last_purchase,

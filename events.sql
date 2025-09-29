@@ -1,4 +1,4 @@
-CREATE OR REPLACE TABLE FUNCTION `tom-moretti.nameless_analytics.events`(start_date DATE, end_date DATE, user_session_scope_param STRING) AS (
+CREATE OR REPLACE TABLE FUNCTION `tom-moretti.nameless_analytics.events`(start_date DATE, end_date DATE, param_scope STRING) AS (
 with users_raw_changelog as (
     select
       document_name,
@@ -65,21 +65,21 @@ with users_raw_changelog as (
     where true 
       and not is_deleted
       and case 
-        when user_session_scope_param = 'user_level' then date(JSON_VALUE(data, '$.user_date'))
+        when param_scope = 'user_level' then date(JSON_VALUE(data, '$.user_date'))
         else date(JSON_VALUE(session_data, '$.session_date'))
       end between start_date and end_date
     group by all
   )
-
-  select
-    # USER AND SESSION DATA 
+  
+  SELECT
+    -- User data
     users_raw.*,
 
-    # EVENT DATA
-    events_raw.* except (client_id, session_id),
-  from users_raw 
-  left join `tom-moretti.nameless_analytics.events_raw` as events_raw 
-    on users_raw.client_id = events_raw.client_id
-    and users_raw.session_id  = events_raw.session_id
-  where event_id is not null
+    --Events data
+    events_raw.* EXCEPT(client_id, session_id)
+  FROM users_raw
+  LEFT JOIN `tom-moretti.nameless_analytics.events_raw` as events_raw
+    ON users_raw.client_id = events_raw.client_id
+    AND users_raw.session_id = events_raw.session_id
+  WHERE events_raw.event_id IS NOT NULL
 );
