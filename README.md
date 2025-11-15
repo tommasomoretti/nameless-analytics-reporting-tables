@@ -9,6 +9,7 @@ The Nameless Analytics reporting tables is a set of tables in BigQuery where use
 For an overview of how Nameless Analytics works [start from here](https://github.com/tommasomoretti/nameless-analytics/).
 
 Table of contents:
+- [Create tables and table functions](#create-tables-and-table-functions)
 - Tables
   - [Events raw table](#events-raw-table)
   - [Dates table](#dates-table)
@@ -23,9 +24,6 @@ Table of contents:
   - [Shopping stages closed funnel](#shopping-stages-closed-funnel)
   - [GTM performances](#gtm-performances)
   - [Consents](#consents)
-- [Create tables](#create-tables)
-- [Create table functions](#create-table-functions)
-
 
 
 ## Tables
@@ -317,11 +315,6 @@ execute immediate main_table_sql;
 -- execute immediate dates_table_sql;
 ```
 </details>
-
-
-
-## Create table functions
-
 
 ---
 
