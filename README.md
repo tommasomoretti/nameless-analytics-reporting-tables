@@ -114,12 +114,10 @@ This is the schema of the Consents table function.
 
 
 
-## Create tables
+## Create tables and table functions
 
-To create the tables use this DML statement.
-
-<details><summary>Standard payload details</summary>
-
+<details><summary>To create the tables use this DML statement.</summary>
+  
 ```sql
 # NAMELESS ANALYTICS
 
