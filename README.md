@@ -11,7 +11,6 @@ For an overview of how Nameless Analytics works [start from here](https://github
 Table of contents:
 - Tables
   - [Events raw table](#events-raw-table)
-  - [Users raw changelog table](#users-raw-changelog-table)
   - [Dates table](#dates-table)
 - Table functions
   - [Events](#events)
@@ -52,12 +51,6 @@ This is the schema of the raw data main table. It's a partitioned table by event
 | ecommerce                  | JSON     | NULLABLE | Ecommerce object                                                                                                                                                                                                              |
 | datalayer                  | JSON     | NULLABLE | Current dataLayer value                                                                                                                                                                                                       |
 | consent_data               | RECORD   | REPEATED | Consent data                                                                                                   
-
-
-### Users raw changelog table
-The Users raw changelog table is the export of the Google Firestore users collection. Learn more about [stream Firestore data to BigQuery](https://extensions.dev/extensions/firebase/firestore-bigquery-export).
-
-The users_raw_latest view is useless and can be safely deleted.
 
  
 ### Dates table
