@@ -125,6 +125,8 @@ This is the schema of the Consents table function.
 
 To create the tables use this DML statement.
 
+<details><summary>Standard payload details</summary>
+
 ```sql
 # NAMELESS ANALYTICS
 
@@ -323,6 +325,7 @@ declare dates_table_sql string default FORMAT(
 execute immediate main_table_sql;
 -- execute immediate dates_table_sql;
 ```
+</details>
 
 
 
