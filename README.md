@@ -215,9 +215,8 @@ declare main_table_sql string default format(
       event_name STRING NOT NULL OPTIONS (description = 'Event name'),
       event_id STRING NOT NULL OPTIONS (description = 'Event ID'),
       event_date DATE NOT NULL OPTIONS (description = 'Event date'),
-      -- event_datetime DATETIME OPTIONS (description = 'Event datetime'),
-      event_timestamp int NOT NULL OPTIONS (description = 'Insert event timestamp'),
-      event_origin STRING NOT NULL OPTIONS (description = 'Event origin: Website or Streaming protocol'),
+      event_timestamp int NOT NULL OPTIONS (description = 'Event timestamp'),
+      event_origin STRING NOT NULL OPTIONS (description = 'Event origin'),
       event_data ARRAY<
         STRUCT<
           name STRING OPTIONS (description = 'Event data parameter name'),
@@ -309,10 +308,10 @@ declare dates_table_sql string default FORMAT(
 
 
 # Create tables 
--- execute immediate enable_bigquery_advanced_runtime;
--- execute immediate main_dataset_sql;
+execute immediate enable_bigquery_advanced_runtime;
+execute immediate main_dataset_sql;
 execute immediate main_table_sql;
--- execute immediate dates_table_sql;
+execute immediate dates_table_sql;
 ```
 </details>
 
