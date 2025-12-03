@@ -25,6 +25,9 @@ Table of contents:
   - [GTM performances](#gtm-performances)
   - [Consents](#consents)
 
+</br>
+
+
 
 ## Tables
 ### Events raw table
@@ -68,6 +71,8 @@ This is the schema of the Dates table. It's a partitioned table by date, cluster
 | day_of_week_number | INTEGER | NULLABLE | Day of the week number (1 for Monday, 7 for Sunday)            |
 | is_weekend         | BOOLEAN | NULLABLE | True if the day is Saturday or Sunday                          |
 
+</br>
+
 
 
 ## Table functions
@@ -110,10 +115,11 @@ This is the schema of the GTM performances table function.
 ### Consents
 This is the schema of the Consents table function.
 
+</br>
+
 
 
 ## Create tables and table functions
-
 <details><summary>To create the tables use this DML statement.</summary>
   
 ```sql
