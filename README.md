@@ -15,6 +15,7 @@ Table of contents:
   - [Events raw table](#events-raw-table)
   - [Dates table](#dates-table)
 - Table functions
+  - [Users raw latest](#users-raw-latest)
   - [Events](#events)
   - [Users](#users)
   - [Sessions](#sessions)
@@ -79,6 +80,10 @@ This table is partitioned by `date` and clustered by `month_name` and `day_name`
 ## Table functions
 ### Users raw latest
 This is the schema of the Users raw latest table function.
+
+
+### Events
+This is the schema of the Events table function.
 
 
 ### Users
