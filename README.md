@@ -15,7 +15,6 @@ Table of contents:
   * [Events raw table](#events-raw-table)
   * [Dates table](#dates-table)
 * Table functions
-  * [Users raw latest](#users-raw-latest)
   * [Events](#events)
   * [Users](#users)
   * [Sessions](#sessions)
@@ -35,43 +34,43 @@ Table of contents:
 ### Events raw table
 This main table is partitioned by `event_date` and clustered by `client_id`, `session_id`, and `event_name`.
 
-| Field name                 | Type     | Mode     | Description                                                                                                                                                                                                                   |
-|----------------------------|----------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| event_date                 | DATE     | REQUIRED | Date of the request.                                                                                                                                                                                                          |
-| event_datetime             | DATETIME | NULLABLE | Datetime of the request.                                                                                                                                                                                                      |
-| event_timestamp            | INTEGER  | REQUIRED | Insertion timestamp of the event.                                                                                                                                                                                             |
-| processing_event_timestamp | INTEGER  | NULLABLE | Timestamp when the Nameless Analytics Server-side Client Tag received the event, applicable for hits sent from a website or via a Streaming Protocol request.                                                              |
-| event_origin               | STRING   | REQUIRED | "Streaming Protocol" if the hit comes from the streaming protocol, "Website" if the hit comes from a browser.                                                                                                                 |
-| job_id                     | STRING   | NULLABLE | Job ID for Streaming Protocol hits.                                                                                                                                                                                           |
-| content_length             | INTEGER  | NULLABLE | Size of the message body in bytes.                                                                                                                                                                                            |
-| client_id                  | STRING   | REQUIRED | Client ID.                                                                                                                                                                                                                    |
-| user_data                  | RECORD   | REPEATED | User data.                                                                                                                                                                                                                    |
-| session_id                 | STRING   | REQUIRED | Session ID.                                                                                                                                                                                                                   |
-| session_data               | RECORD   | REPEATED | Session data.                                                                                                                                                                                                                 |
-| event_id                   | STRING   | REQUIRED | Event ID.                                                                                                                                                                                                                     |
-| event_name                 | STRING   | REQUIRED | Event name.                                                                                                                                                                                                                   |
-| event_data                 | RECORD   | REPEATED | Event data.                                                                                                                                                                                                                   |
-| ecommerce                  | JSON     | NULLABLE | Ecommerce object.                                                                                                                                                                                                             |
-| datalayer                  | JSON     | NULLABLE | Current `dataLayer` value.                                                                                                                                                                                                    |
-| consent_data               | RECORD   | REPEATED | Consent data.                                                                                                                                                                                                                 |
+| Field name                 | Type     | Mode     | Description                                                                                                                                                   |
+|----------------------------|----------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| event_date                 | DATE     | REQUIRED | Date of the request.                                                                                                                                          |
+| event_datetime             | DATETIME | NULLABLE | Datetime of the request.                                                                                                                                      |
+| event_timestamp            | INTEGER  | REQUIRED | Insertion timestamp of the event.                                                                                                                             |
+| processing_event_timestamp | INTEGER  | NULLABLE | Timestamp when the Nameless Analytics Server-side Client Tag received the event, applicable for hits sent from a website or via a Streaming Protocol request. |
+| event_origin               | STRING   | REQUIRED | "Streaming Protocol" if the hit comes from the streaming protocol, "Website" if the hit comes from a browser.                                                 |
+| job_id                     | STRING   | NULLABLE | Job ID for Streaming Protocol hits.                                                                                                                           |
+| content_length             | INTEGER  | NULLABLE | Size of the message body in bytes.                                                                                                                            |
+| client_id                  | STRING   | REQUIRED | Client ID.                                                                                                                                                    |
+| user_data                  | RECORD   | REPEATED | User data.                                                                                                                                                    |
+| session_id                 | STRING   | REQUIRED | Session ID.                                                                                                                                                   |
+| session_data               | RECORD   | REPEATED | Session data.                                                                                                                                                 |
+| event_id                   | STRING   | REQUIRED | Event ID.                                                                                                                                                     |
+| event_name                 | STRING   | REQUIRED | Event name.                                                                                                                                                   |
+| event_data                 | RECORD   | REPEATED | Event data.                                                                                                                                                   |
+| ecommerce                  | JSON     | NULLABLE | Ecommerce object.                                                                                                                                             |
+| datalayer                  | JSON     | NULLABLE | Current `dataLayer` value.                                                                                                                                    |
+| consent_data               | RECORD   | REPEATED | Consent data.                                                                                                                                                 |
 
  
 ### Dates table
 This table is partitioned by `date` and clustered by `month_name` and `day_name`.
 
-| Field name         | Type    | Mode     | Description                                                    |
-|--------------------|---------|----------|----------------------------------------------------------------|
-| date               | DATE    | REQUIRED | The date value.                                                |
-| year               | INTEGER | NULLABLE | Year extracted from the date.                                  |
-| quarter            | INTEGER | NULLABLE | Quarter of the year (1-4) extracted from the date.             |
-| month_number       | INTEGER | NULLABLE | Month number of the year (1-12) extracted from the date.       |
-| month_name         | STRING  | NULLABLE | Full name of the month (e.g., January) extracted from the date.|
-| week_number_sunday | INTEGER | NULLABLE | Week number of the year, starting on Sunday.                   |
-| week_number_monday | INTEGER | NULLABLE | Week number of the year, starting on Monday.                   |
-| day_number         | INTEGER | NULLABLE | Day number of the month (1-31).                                |
-| day_name           | STRING  | NULLABLE | Full name of the day of the week (e.g., Monday).               |
-| day_of_week_number | INTEGER | NULLABLE | Day of the week number (1 for Monday, 7 for Sunday).           |
-| is_weekend         | BOOLEAN | NULLABLE | True if the day is a Saturday or Sunday.                       |
+| Field name         | Type    | Mode     | Description                                                     |
+|--------------------|---------|----------|---------------------------------------------------------------- |
+| date               | DATE    | REQUIRED | The date value.                                                 |
+| year               | INTEGER | NULLABLE | Year extracted from the date.                                   |
+| quarter            | INTEGER | NULLABLE | Quarter of the year (1-4) extracted from the date.              |
+| month_number       | INTEGER | NULLABLE | Month number of the year (1-12) extracted from the date.        |
+| month_name         | STRING  | NULLABLE | Full name of the month (e.g., January) extracted from the date. |
+| week_number_sunday | INTEGER | NULLABLE | Week number of the year, starting on Sunday.                    |
+| week_number_monday | INTEGER | NULLABLE | Week number of the year, starting on Monday.                    |
+| day_number         | INTEGER | NULLABLE | Day number of the month (1-31).                                 |
+| day_name           | STRING  | NULLABLE | Full name of the day of the week (e.g., Monday).                |
+| day_of_week_number | INTEGER | NULLABLE | Day of the week number (1 for Monday, 7 for Sunday).            |
+| is_weekend         | BOOLEAN | NULLABLE | True if the day is a Saturday or Sunday.                        |
 
 </br>
 
@@ -80,8 +79,8 @@ This table is partitioned by `date` and clustered by `month_name` and `day_name`
 ## Table functions
 Table functions are predefined SQL queries that simplify data analysis by transforming raw event data into structured, easy-to-use formats for common reporting needs.
 
-### Users raw latest
-Provides the latest available data for each user, including their most recent campaign and session information.
+#### "Single Source of Truth" analysis logic
+Unlike other systems, Nameless Analytics reporting functions are designed to work directly on the `events_raw` table as the single source of truth. By leveraging BigQuery **Window Functions**. This approach ensures that reports always reflect the most up-to-date state of the data without the need for complex ETL processes or intermediate staging tables.
 
 ### Events
 Flattens raw event data and extracts custom parameters, making it easier to analyze specific interaction metrics.
@@ -124,9 +123,9 @@ Tracks changes in user consent status over time, ensuring compliance and data tr
 # NAMELESS ANALYTICS
 
 # Project settings
-declare project_name string default 'tom-moretti';  -- Change this
-declare dataset_name string default 'nameless_analytics'; -- Change this
-declare dataset_location string default 'eu'; -- Change this
+declare project_name string default 'project_name';  -- Change this
+declare dataset_name string default 'dataset_name'; -- Change this
+declare dataset_location string default 'dataset_location'; -- Change this
 
 # Tables
 declare main_table_name string default 'events_raw';
@@ -142,6 +141,7 @@ declare dates_table_path string default CONCAT('`', project_name, '.', dataset_n
 
 
 # Enable BigQuery advanced runtime (for more info https://cloud.google.com/bigquery/docs/advanced-runtime)
+# Enables a more advanced query execution engine that automatically improves performance and efficiency for complex analytical queries
 declare enable_bigquery_advanced_runtime string default format(
   """
     ALTER PROJECT `%s`
@@ -161,7 +161,7 @@ declare main_dataset_sql string default format(
       # default_partition_expiration_days = PARTITION_EXPIRATION,
       # default_table_expiration_days = TABLE_EXPIRATION,
       # max_time_travel_hours = HOURS, # default 168 hours => 7 days 
-      # storage_billing_model = BILLING_MODEL # Physical or logical (default)  
+      # storage_billing_model = BILLING_MODEL # Phytical or logical (default)  
       description = 'Nameless Analytics',
       location = '%s'
     );
@@ -174,7 +174,6 @@ declare main_table_sql string default format(
   """
     create table if not exists %s (
       client_id STRING NOT NULL OPTIONS (description = 'Client ID'),
-      user_id STRING OPTIONS (description = 'User ID'),
       user_date DATE NOT NULL OPTIONS (description = 'User date'),
       user_data ARRAY<
         STRUCT<
@@ -316,6 +315,13 @@ execute immediate enable_bigquery_advanced_runtime;
 execute immediate main_dataset_sql;
 execute immediate main_table_sql;
 execute immediate dates_table_sql;
+```
+</details>
+
+<details><summary>To create the table functions use this DML statement.</summary>
+  
+```sql
+
 ```
 </details>
 
