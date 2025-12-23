@@ -10,22 +10,22 @@ Nameless Analytics reporting tables are a set of tables in BigQuery where user, 
 For an overview of how Nameless Analytics works [start from here](https://github.com/tommasomoretti/nameless-analytics/).
 
 Table of contents:
-- [Create tables and table functions](#create-tables-and-table-functions)
-- Tables
-  - [Events raw table](#events-raw-table)
-  - [Dates table](#dates-table)
-- Table functions
-  - [Users raw latest](#users-raw-latest)
-  - [Events](#events)
-  - [Users](#users)
-  - [Sessions](#sessions)
-  - [Pages](#pages)
-  - [Transactions](#transactions)
-  - [Products](#products)
-  - [Shopping stages open funnel](#shopping-stages-open-funnel)
-  - [Shopping stages closed funnel](#shopping-stages-closed-funnel)
-  - [GTM performances](#gtm-performances)
-  - [Consents](#consents)
+* [Create tables and table functions](#create-tables-and-table-functions)
+* Tables
+  * [Events raw table](#events-raw-table)
+  * [Dates table](#dates-table)
+* Table functions
+  * [Users raw latest](#users-raw-latest)
+  * [Events](#events)
+  * [Users](#users)
+  * [Sessions](#sessions)
+  * [Pages](#pages)
+  * [Transactions](#transactions)
+  * [Products](#products)
+  * [Shopping stages open funnel](#shopping-stages-open-funnel)
+  * [Shopping stages closed funnel](#shopping-stages-closed-funnel)
+  * [GTM performances](#gtm-performances)
+  * [Consents](#consents)
 
 </br>
 
