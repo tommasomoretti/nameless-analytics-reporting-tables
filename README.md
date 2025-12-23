@@ -51,9 +51,9 @@ This main table is partitioned by `event_date` and clustered by `client_id`, `se
 | event_id                   | STRING   | REQUIRED | Event ID.                                                                                                                                                                                                                     |
 | event_name                 | STRING   | REQUIRED | Event name.                                                                                                                                                                                                                   |
 | event_data                 | RECORD   | REPEATED | Event data.                                                                                                                                                                                                                   |
-| ecommerce                  | JSON     | NULLABLE | E-commerce object.                                                                                                                                                                                                            |
+| ecommerce                  | JSON     | NULLABLE | Ecommerce object.                                                                                                                                                                                                             |
 | datalayer                  | JSON     | NULLABLE | Current `dataLayer` value.                                                                                                                                                                                                    |
-| consent_data               | RECORD   | REPEATED | Consent data.                                                                                                   
+| consent_data               | RECORD   | REPEATED | Consent data.                                                                                                                                                                                                                 |
 
  
 ### Dates table
@@ -78,48 +78,40 @@ This table is partitioned by `date` and clustered by `month_name` and `day_name`
 
 
 ## Table functions
-### Users raw latest
-This is the schema of the Users raw latest table function.
+Table functions are predefined SQL queries that simplify data analysis by transforming raw event data into structured, easy-to-use formats for common reporting needs.
 
+### Users raw latest
+Provides the latest available data for each user, including their most recent campaign and session information.
 
 ### Events
-This is the schema of the Events table function.
-
+Flattens raw event data and extracts custom parameters, making it easier to analyze specific interaction metrics.
 
 ### Users
-This is the schema of the Users table function.
-
+Aggregates data at the user level, calculating lifecycle metrics like total sessions, first/last seen dates, and lifetime values.
 
 ### Sessions
-This is the schema of the Sessions table function.
-
+Groups events into individual sessions, calculating duration, bounce rates, and landing/exit pages.
 
 ### Pages
-This is the schema of the Pages table function.
-
+Focuses on page-level performance, aggregating views, time on page, and navigation paths.
 
 ### Transactions
-This is the schema of the Transactions table function.
-
+Extracts and structures ecommerce transaction data, including revenue, tax, and shipping details.
 
 ### Products
-This is the schema of the Products table function.
-
+Provides a granular view of product performance, including views, add-to-carts, and purchases per SKU.
 
 ### Shopping stages open funnel
-This is the schema of the Shopping stages open funnel table function.
-
+Calculates drop-off rates across the entire shopping journey, regardless of where the user started.
 
 ### Shopping stages closed funnel
-This is the schema of the Shopping stages closed funnel table function.
-
+Analyzes the shopping journey for users who follow a specific, linear sequence of steps.
 
 ### GTM performances
-This is the schema of the GTM performances table function.
-
+Provides metrics on GTM container execution times and tag performance to help optimize site speed.
 
 ### Consents
-This is the schema of the Consents table function.
+Tracks changes in user consent status over time, ensuring compliance and data transparency.
 
 </br>
 
