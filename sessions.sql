@@ -12,18 +12,9 @@ with event_data as (
       user_device_type,
       user_country,
       user_language,
-      case 
-        when session_number = 1 then 'new_user'
-        when session_number > 1 then 'returning_user'
-      end as user_type,
-      case 
-        when session_number = 1 then client_id
-        else null
-      end as new_user,
-      case 
-        when session_number > 1 then client_id
-        else null
-      end as returning_user,
+      user_type,
+      new_user,
+      returning_user,
 
       -- SESSION DATA
       session_date,
@@ -52,7 +43,7 @@ with event_data as (
       -- EVENT DATA
       event_date,
       event_name,
-      event_datetime,
+      event_timestamp,
 
       -- ECOMMERCE DATA
       case
@@ -81,16 +72,16 @@ with event_data as (
       end as refund_tax,
 
       -- CONSENT DATA
-      (select value.string from unnest(consent_data) where name = "consent_type")as consent_type,
-      (select value.string from unnest(consent_data) where name = "ad_user_data")as ad_user_data,
-      (select value.string from unnest(consent_data) where name = "ad_personalization")as ad_personalization,
-      (select value.string from unnest(consent_data) where name = "ad_storage")as ad_storage,
-      (select value.string from unnest(consent_data) where name = "analytics_storage")as analytics_storage,
-      (select value.string from unnest(consent_data) where name = "functionality_storage")as functionality_storage,
-      (select value.string from unnest(consent_data) where name = "personalization_storage")as personalization_storage,
-      (select value.string from unnest(consent_data) where name = "security_storage")as security_storage,
+      consent_type,
+      ad_user_data,
+      ad_personalization,
+      ad_storage,
+      analytics_storage,
+      functionality_storage,
+      personalization_storage,
+      security_storage,
 
-    from `tom-moretti.nameless_analytics.events` (start_date, end_date, 'session_level')
+    from `tom-moretti.nameless_analytics.events` (start_date, end_date, 'session')
     group by all
   ),
 
@@ -138,7 +129,6 @@ with event_data as (
       -- EVENT DATA
       event_date,
       event_name,
-      event_datetime,
 
       -- ECOMMERCE DATA
       transaction_value,
@@ -150,42 +140,42 @@ with event_data as (
 
       -- CONSENT DATA
       case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then ad_user_data end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(ad_user_data) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_ad_user_data,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then ad_personalization end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(ad_personalization) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_ad_personalization,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then ad_storage end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(ad_storage) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_ad_storage,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then analytics_storage end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(analytics_storage) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_analytics_storage,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then functionality_storage end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(functionality_storage) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_functionality_storage,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then personalization_storage end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(personalization_storage) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_personalization_storage,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then security_storage end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(security_storage) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-      end as session_security_storage,
-      case 
-        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then event_datetime end ignore nulls) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
-        else first_value(event_datetime) over (partition by session_id order by event_datetime asc rows between unbounded preceding and unbounded following)
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then event_timestamp end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(event_timestamp) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
       end as consent_timestamp,
       case 
           when countif(consent_type = 'Update') over (partition by session_id) > 0 then 'Yes'
           when countif(consent_type = 'Default') over (partition by session_id) > 0 then 'No'
           else consent_type
-      end as consent_expressed
+      end as consent_expressed,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then ad_user_data end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(ad_user_data) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_ad_user_data,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then ad_personalization end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(ad_personalization) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_ad_personalization,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then ad_storage end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(ad_storage) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_ad_storage,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then analytics_storage end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(analytics_storage) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_analytics_storage,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then functionality_storage end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(functionality_storage) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_functionality_storage,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then personalization_storage end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(personalization_storage) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_personalization_storage,
+      case 
+        when countif(consent_type = 'Update') over (partition by session_id) > 0 then first_value(case when consent_type = 'Update' then security_storage end ignore nulls) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+        else first_value(security_storage) over (partition by session_id order by event_timestamp asc rows between unbounded preceding and unbounded following)
+      end as session_security_storage,
     from event_data
   ),
 
@@ -251,6 +241,8 @@ with event_data as (
       ifnull(sum(refund_tax), 0) as refund_tax,
 
       -- CONSENT DATA
+      consent_timestamp,
+      consent_expressed,
       case when session_ad_user_data = 'Granted' then 1 else 0 end as session_ad_user_data,
       case when session_ad_personalization = 'Granted' then 1 else 0 end as session_ad_personalization,
       case when session_ad_storage = 'Granted' then 1 else 0 end as session_ad_storage,
@@ -258,9 +250,6 @@ with event_data as (
       case when session_functionality_storage = 'Granted' then 1 else 0 end as session_functionality_storage,
       case when session_personalization_storage = 'Granted' then 1 else 0 end as session_personalization_storage,
       case when session_security_storage = 'Granted' then 1 else 0 end as session_security_storage,
-      consent_timestamp,
-      consent_expressed
-
     from event_data_def
     group by all
   )
@@ -338,16 +327,15 @@ with event_data as (
     ifnull(sum(purchase_tax), 0) + ifnull(sum(refund_tax), 0) as tax_net_refund,
 
     -- CONSENT DATA
+    consent_timestamp,
+    consent_expressed,
     session_ad_user_data,
     session_ad_personalization,
     session_ad_storage,
     session_analytics_storage,
     session_functionality_storage,
     session_personalization_storage,
-    session_security_storage,
-    consent_timestamp,
-    consent_expressed
-    
+    session_security_storage
   from session_data
   group by all
 );

@@ -50,24 +50,24 @@ with event_data as (
       session_browser_name,
 
       -- PAGE DATA
-      (select value.string from unnest (page_data) where name = 'page_id') as page_id,
-      first_value(event_timestamp) over (partition by (select value.string from unnest (page_data) where name = 'page_id') order by event_timestamp asc) as page_load_timestamp,
-      first_value(event_timestamp) over (partition by (select value.string from unnest (page_data) where name = 'page_id') order by event_timestamp desc) as page_unload_timestamp,
-      (select value.string from unnest (page_data) where name = 'page_category') as page_category,
-      (select value.string from unnest (page_data) where name = 'page_location') as page_location,
-      (select value.string from unnest (page_data) where name = 'page_title') as page_title,
-      (select value.string from unnest (page_data) where name = 'page_hostname') as page_hostname,
-      (select value.int from unnest (page_data) where name = 'page_status_code') as page_status_code,
-      (select value.int from unnest (event_data) where name = 'time_to_dom_interactive') as time_to_dom_interactive,
-      (select value.int from unnest (event_data) where name = 'page_render_time') as page_render_time,
-      (select value.int from unnest (event_data) where name = 'time_to_dom_complete') as time_to_dom_complete,
-      (select value.int from unnest (event_data) where name = 'total_page_load_time') as total_page_load_time,
+      page_id,
+      first_value(event_timestamp) over (partition by page_id order by event_timestamp asc) as page_load_timestamp,
+      first_value(event_timestamp) over (partition by page_id order by event_timestamp desc) as page_unload_timestamp,
+      page_category,
+      page_location,
+      page_title,
+      page_hostname,
+      page_status_code,
+      time_to_dom_interactive,
+      page_render_time,
+      time_to_dom_complete,
+      total_page_load_time,
 
       -- EVENT DATA
       event_date,
       event_name,
       event_timestamp,    
-    from `tom-moretti.nameless_analytics.events` (start_date, end_date , 'session_level')
+    from `tom-moretti.nameless_analytics.events` (start_date, end_date , 'session')
   ),
 
   page_data as(
@@ -77,7 +77,7 @@ with event_data as (
       client_id,
       user_id,
       user_channel_grouping,
-      split(user_tld_source, '.')[safe_offset(0)] as user_source,
+      ifnull(split(user_tld_source, '.')[safe_offset(0)], user_source) as user_source,
       user_tld_source,
       user_campaign,
       user_device_type,
@@ -93,7 +93,7 @@ with event_data as (
       session_id,
       session_start_timestamp,
       session_channel_grouping,
-      split(session_tld_source, '.')[safe_offset(0)] as session_source,
+      ifnull(split(session_tld_source, '.')[safe_offset(0)], session_source) as session_source,
       session_tld_source,
       session_campaign,
       cross_domain_session,

@@ -57,7 +57,7 @@ with event_data as (
 
       -- ECOMMERCE DATA
       ecommerce,
-    from `tom-moretti.nameless_analytics.events` (start_date, end_date, 'session_level')
+    from `tom-moretti.nameless_analytics.events` (start_date, end_date, 'session')
   ),
 
   transaction_data as (

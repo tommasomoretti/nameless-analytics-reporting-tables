@@ -58,7 +58,7 @@ with event_data as (
       ecommerce as transaction_data,
       json_extract_array(ecommerce, '$.items') as items_data
       
-    from `tom-moretti.nameless_analytics.events` (start_date, end_date, 'session_level')
+    from `tom-moretti.nameless_analytics.events` (start_date, end_date, 'session')
   ),
 
   product_data as (
